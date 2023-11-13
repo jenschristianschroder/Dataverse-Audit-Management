@@ -1,0 +1,92 @@
+{
+    "environments" : [
+        {
+            "environmentName" : "DEV",
+            "environmentId" : "b5ff8e3b-97fc-e431-9a6e-c38228801b5d",
+            "organizationId" : "f93206d8-7bfb-4d04-a8ef-6ec5c9d9dc73",
+            "environmentUrl" : "https://org7e5c0996.crm4.dynamics.com/",
+            "IsAuditEnabled" : true,
+            "AuditRetentionPeriodV2" : 30,
+            "IsUserAccessAuditEnabled" : true,
+            "UserAccessAuditingInterval" : 5,
+            "tables" : [
+                {
+                    "logicalName" : "cat_auditablerecord",
+                    "IsAuditEnabled" : false,
+                    "IsRetrieveAuditEnabled" : false,
+                    "IsRetrieveMultipleAuditEnabled": false,
+                    "columns" : [
+                        {
+                            "logicalName" : "cat_name",
+                            "IsAuditEnabled" : false
+                        },
+                        {
+                            "logicalName" : "cat_duration",
+                            "IsAuditEnabled" : false
+                        }
+                    ]
+                },
+                {
+                    "logicalName" : "cat_anotherauditablerecord",
+                    "IsAuditEnabled" : false,
+                    "IsRetrieveAuditEnabled" : false,
+                    "IsRetrieveMultipleAuditEnabled": false,
+                    "columns" : [
+                        {
+                            "logicalName" : "cat_name",
+                            "IsAuditEnabled" : false
+                        },
+                        {
+                            "logicalName" : "cat_audittext",
+                            "IsAuditEnabled" : false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "environmentName" : "VAL",
+            "environmentId" : "b8c9558a-9b05-e84e-b073-3f5fb887a057",
+            "organizationId" : "463c0910-2460-44f7-94f1-6d824f6f7b80",
+            "environmentUrl" : "https://org1a7907ca.crm4.dynamics.com/",
+            "IsAuditEnabled" : true,
+            "AuditRetentionPeriodV2" : 30,
+            "IsUserAccessAuditEnabled" : true,
+            "UserAccessAuditingInterval" : 5,
+            "tables" : [
+                {
+                    "logicalName" : "cat_auditablerecord",
+                    "IsAuditEnabled" : false,
+                    "IsRetrieveAuditEnabled" : false,
+                    "IsRetrieveMultipleAuditEnabled": false,
+                    "columns" : [
+                        {
+                            "logicalName" : "cat_name",
+                            "IsAuditEnabled" : false
+                        },
+                        {
+                            "logicalName" : "cat_duration",
+                            "IsAuditEnabled" : false
+                        }
+                    ]
+                },
+                {
+                    "logicalName" : "cat_anotherauditablerecord",
+                    "IsAuditEnabled" : true,
+                    "IsRetrieveAuditEnabled" : true,
+                    "IsRetrieveMultipleAuditEnabled": true,
+                    "columns" : [
+                        {
+                            "logicalName" : "cat_name",
+                            "IsAuditEnabled" : true
+                        },
+                        {
+                            "logicalName" : "cat_audittext",
+                            "IsAuditEnabled" : true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
