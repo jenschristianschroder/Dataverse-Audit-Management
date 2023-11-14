@@ -43,13 +43,17 @@ $environmentsConfiguration = Get-Content -Raw "$audit_configuration_path" | Out-
 
 $environmentsConfiguration | Get-ObjectMember | ForEach-Object {
     $environments = $_.Value
+
     # loop environments in configuration file
     $environments | ForEach-Object {
         $environment = $_
         $environmentName = $environment.environmentName
         $environmentUrl = $environment.environmentUrl   
-        Write-Host "Environment $environmentName ($environmentUrl)"
+        Write-Host "`nEnvironment $environmentName ($environmentUrl)"
         Write-Host "- Updating environment settings"
+
+        # prepare publishXml payload
+        $ParameterXml = "<importexportxml><entities>"
 
         # authenticate to the environment
         $auth = Get-AuthToken $tenantId $clientId $clientSecret $environmentUrl
@@ -84,6 +88,9 @@ $environmentsConfiguration | Get-ObjectMember | ForEach-Object {
         $environment.tables | ForEach-Object {
             $table = $_
             $tableName = $table.logicalName
+
+            # add table logical name to publishXml payload
+            $ParameterXml = $ParameterXml + "<entity>$tableName</entity>"
 
             # api endpoint for updating the table definition
             $apiEndpoint = "$environmentUrl/api/data/v9.2/EntityDefinitions(LogicalName='$tableName')"
@@ -145,5 +152,20 @@ $environmentsConfiguration | Get-ObjectMember | ForEach-Object {
 
         }
 
+        $ParameterXml = $ParameterXml + "</entities></importexportxml>"
+        
+        # publish changes
+        Write-Host "Publishing changes to $environmentName ($environmentUrl)"
+        [xml]$xmlDoc = New-Object system.Xml.XmlDocument
+        $xmlDoc.LoadXml($ParameterXml)
+        Select-Xml -Xml $xmlDoc -XPath "/importexportxml/entities/entity" | Select-Object -ExpandProperty Node | ForEach-Object { Write-Host "-" $_.InnerText}
+
+        $publishXML = '{ "ParameterXml": "' + $ParameterXml + '"}'
+        
+        $apiEndpoint = "$environmentUrl/api/data/v9.2/PublishXml"
+        $fieldConfiguration = Invoke-RestMethod -Uri $apiEndpoint -Method POST -Headers @{
+            "Authorization" = "$($auth.token_type) $($auth.access_token)"
+            "Content-Type" = "application/json; charset=utf-8"
+        } -Body $publishXML
     }
 }
